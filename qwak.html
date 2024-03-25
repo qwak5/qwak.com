@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Enter</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+        }
+        #enter-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #ip-country {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop>
+        <source src="scarier.mp4" type="video/mp4">
+    </video>
+    <audio autoplay loop>
+        <source src="yt1s (mp3cut.net).mp3" type="audio/mpeg">
+    </audio>
+    <button id="enter-button">CLICK TO ENTER</button>
+    <p id="ip-country"></p>
+    <script>
+        document.addEventListener("click", async () => {
+            try {
+                const response = await fetch("https://api64.ipify.org?format=json");
+                const data = await response.json();
+                const ip = data.ip;
+                const countryResponse = await fetch(`https://ipapi.co/${ip}/country_name/`);
+                const country = await countryResponse.text();
+                document.getElementById("ip-country").textContent = `Your IP: ${ip} | Your Country: ${country}`;
+                document.getElementById("ip-country").style.display = "block";
+                document.getElementById("enter-button").style.display = "none";
+            } catch (error) {
+                console.error("Error fetching IP data:", error);
+            }
+        });
+    </script>
+</body>
+</html>
